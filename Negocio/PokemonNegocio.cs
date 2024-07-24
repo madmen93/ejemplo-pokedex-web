@@ -63,6 +63,48 @@ namespace negocio
             
         }
 
+        public List<Pokemon> listarconSP()
+        {
+            List<Pokemon> lista = new List<Pokemon>();
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                string consulta = "Select Numero, Nombre, P.Descripcion, UrlImagen, E.Descripcion Tipo, D.Descripcion Debilidad, P.IdTipo, P.IdDebilidad, P.Id from POKEMONS P, ELEMENTOS E, ELEMENTOS D where E.Id = P.IdTipo AND D.Id = P.IdDebilidad And P.Activo = 1";
+               
+                datos.setearConsulta(consulta);
+                datos.ejecutarLectura();
+                while (datos.Lector.Read())
+                {
+                    Pokemon aux = new Pokemon(); //1
+                    aux.Id = (int)datos.Lector["Id"];
+                    aux.Numero = datos.Lector.GetInt32(0); //2
+                    aux.Nombre = (string)datos.Lector["Nombre"]; //3
+                    aux.Descripcion = (string)datos.Lector["Descripcion"]; //4
+
+                    //if(!(lector.IsDBNull(lector.GetOrdinal("UrlImagen")))) //11
+                    //  aux.UrlImagen = (string)lector["UrlImagen"]; //5
+                    if (!(datos.Lector["UrlImagen"] is DBNull)) //11
+                        aux.UrlImagen = (string)datos.Lector["UrlImagen"]; //5
+
+
+                    aux.Tipo = new Elemento(); //6
+                    aux.Tipo.Id = (int)datos.Lector["IdTipo"];
+                    aux.Tipo.Descripcion = (string)datos.Lector["Tipo"]; //7
+                    aux.Debilidad = new Elemento(); //8
+                    aux.Debilidad.Id = (int)datos.Lector["IdDebilidad"];
+                    aux.Debilidad.Descripcion = (string)datos.Lector["Debilidad"]; //9
+
+                    lista.Add(aux); //10
+                }
+                return lista;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
         public void agregar(Pokemon nuevo)
         {
             AccesoDatos datos = new AccesoDatos(); //2
