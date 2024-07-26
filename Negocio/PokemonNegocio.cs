@@ -13,7 +13,7 @@ namespace negocio
     public class PokemonNegocio
     {
         //para leer los datos en la DB en SQL
-        public List<Pokemon> listar() //PRIMERO: crear la lista
+        public List<Pokemon> listar(string id = "") //PRIMERO: crear la lista ---OJO: se le agregó el string id para cuando modifiquemos el pokemon 
         {
             List<Pokemon> lista = new List<Pokemon>();//PRIMERO: crear la lista
             SqlConnection conexion = new SqlConnection(); //CUARTO: Crear los objetos para la lectura de la DB (1)
@@ -24,7 +24,9 @@ namespace negocio
             {
                 conexion.ConnectionString = "server=DESKTOP-A97N5T7\\SQLEXPRESS; database=POKEDEX_DB; integrated security=true"; // también puede ser ".\\SQLEXPRESS" o "(local)\\SQLEXPRESS"
                 comando.CommandType = System.Data.CommandType.Text;
-                comando.CommandText = "Select Numero, Nombre, P.Descripcion, UrlImagen, E.Descripcion Tipo, D.Descripcion Debilidad, P.IdTipo, P.IdDebilidad, P.Id from POKEMONS P, ELEMENTOS E, ELEMENTOS D where E.Id = P.IdTipo AND D.Id = P.IdDebilidad And P.Activo = 1";
+                comando.CommandText = "Select Numero, Nombre, P.Descripcion, UrlImagen, E.Descripcion Tipo, D.Descripcion Debilidad, P.IdTipo, P.IdDebilidad, P.Id from POKEMONS P, ELEMENTOS E, ELEMENTOS D where E.Id = P.IdTipo AND D.Id = P.IdDebilidad And P.Activo = 1 "; //al final agregamos un espacion en blanco para el if:
+                if (id != "")
+                    comando.CommandText += "And P.Id = " + id;
                 comando.Connection = conexion;
 
                 conexion.Open();
@@ -154,7 +156,31 @@ namespace negocio
                 datos.cerrarConexion(); //5
             }
         }
+        public void modificarSP(Pokemon modificado)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearProcedimiento("storedModificarPokemon");
+                datos.setearParametro("@numero", modificado.Numero);
+                datos.setearParametro("@nombre", modificado.Nombre);
+                datos.setearParametro("@desc", modificado.Descripcion);
+                datos.setearParametro("@img", modificado.UrlImagen);
+                datos.setearParametro("@idTipo", modificado.Tipo.Id);
+                datos.setearParametro("@idDebilidad", modificado.Debilidad.Id);
+                datos.setearParametro("@id", modificado.Id);
 
+                datos.ejecutarAccion();
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            { datos.cerrarConexion(); }
+        }
         public void modificar(Pokemon modificado)
         {
             AccesoDatos datos = new AccesoDatos();

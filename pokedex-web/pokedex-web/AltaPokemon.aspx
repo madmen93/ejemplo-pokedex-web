@@ -4,7 +4,14 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <asp:ScriptManager ID="scriptmng" runat="server" />
+    <%if (Request.QueryString["id"] == null)
+        {
+
+%>
     <asp:Label runat="server" Text="Nuevo Pokemon" ID="lbTitulo" CssClass="fs-2"></asp:Label>
+           <%} else { %>
+    <asp:Label runat="server" Text="Modificar Pokemon" ID="lbTituloMod" CssClass="fs-2"></asp:Label>
+    <% } %>
     <div class="row">
         <div class="col">
             <div class="mb-3 row">

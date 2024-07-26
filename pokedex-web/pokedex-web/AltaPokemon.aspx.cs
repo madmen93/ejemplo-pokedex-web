@@ -17,6 +17,7 @@ namespace pokedex_web
             txbId.Enabled = false;
             try
             {
+                //Configuración inicial para nuevo pokemon:
                 if (!IsPostBack)
                 {
                     ElementoNegocio negocio = new ElementoNegocio();
@@ -30,6 +31,24 @@ namespace pokedex_web
                     ddlDebilidad.DataValueField = "Id";
                     ddlDebilidad.DataTextField = "Descripcion";
                     ddlDebilidad.DataBind();
+                }
+
+                //Configuración para un pokemon existente (modificar pokemon):
+                if(Request.QueryString["id"] != null && !IsPostBack)
+                {
+                    PokemonNegocio negocio = new PokemonNegocio();
+                    List<Pokemon> lista = negocio.listar(Request.QueryString["id"].ToString());
+                    Pokemon seleccionado = lista[0];
+
+                    txbId.Text = seleccionado.Id.ToString();
+                    txbNombre.Text = seleccionado.Nombre;
+                    txbNumero.Text = seleccionado.Numero.ToString();
+                    txbDescripcion.Text = seleccionado.Descripcion;
+                    txbUrlImagen.Text = seleccionado.UrlImagen;
+
+                    ddlTipo.SelectedValue = seleccionado.Tipo.Id.ToString();
+                    ddlDebilidad.SelectedValue = seleccionado.Debilidad.Id.ToString();
+                    txbUrlImagen_TextChanged(sender, e);
                 }
             }
             catch (Exception ex)
@@ -57,7 +76,13 @@ namespace pokedex_web
                 nuevo.Debilidad = new Elemento();
                 nuevo.Debilidad.Id = int.Parse(ddlDebilidad.SelectedValue);
 
-                negocio.agregarSP(nuevo);
+                if (Request.QueryString["id"]  != null)
+                {
+                    nuevo.Id = int.Parse(txbId.Text);
+                    negocio.modificarSP(nuevo);
+                }
+                else
+                    negocio.agregarSP(nuevo);
                 Response.Redirect("ListaPokemons.aspx", false);
             }
             catch (Exception ex)
