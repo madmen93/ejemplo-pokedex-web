@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using negocio;
+using dominio;
 
 namespace pokedex_web
 {
@@ -13,7 +14,8 @@ namespace pokedex_web
         protected void Page_Load(object sender, EventArgs e)
         {
             PokemonNegocio negocio = new PokemonNegocio();
-            gdvPokemon.DataSource = negocio.listarconSP();
+            Session.Add("listaPokemon", negocio.listarconSP());
+            gdvPokemon.DataSource = Session["listaPokemon"];
             gdvPokemon.DataBind();
         }
 
@@ -26,6 +28,14 @@ namespace pokedex_web
         protected void gdvPokemon_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             gdvPokemon.PageIndex = e.NewPageIndex;
+            gdvPokemon.DataBind();
+        }
+
+        protected void txbFiltroRápido_TextChanged(object sender, EventArgs e)
+        {
+            List<Pokemon> lista = (List<Pokemon>)Session["listaPokemon"];
+            List<Pokemon> listaFiltrada = lista.FindAll(x => x.Nombre.ToUpper().Contains(txbFiltroRápido.Text.ToUpper()));
+            gdvPokemon.DataSource = listaFiltrada;
             gdvPokemon.DataBind();
         }
     }
