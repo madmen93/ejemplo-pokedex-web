@@ -57,7 +57,7 @@ namespace pokedex_web
                 nuevo.Debilidad = new Elemento();
                 nuevo.Debilidad.Id = int.Parse(ddlDebilidad.SelectedValue);
 
-                negocio.agregar(nuevo);
+                negocio.agregarSP(nuevo);
                 Response.Redirect("ListaPokemons.aspx", false);
             }
             catch (Exception ex)

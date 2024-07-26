@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Data.SqlClient; //TERCERO: Incluir la libreria
 using dominio;
 using Negocio;
+using System.Security.Cryptography;
 
 namespace negocio
 {
@@ -106,6 +107,31 @@ namespace negocio
             }
         }
 
+        public void agregarSP(Pokemon nuevo)
+        {
+            AccesoDatos datos = new AccesoDatos(); //2
+
+            try //1
+            {
+                datos.setearProcedimiento("storedAltaPokemon");
+                datos.setearParametro("@numero", nuevo.Numero); 
+                datos.setearParametro("@nombre", nuevo.Nombre); 
+                datos.setearParametro("@desc", nuevo.Descripcion); 
+                datos.setearParametro("@img", nuevo.UrlImagen);
+                datos.setearParametro("@idTipo", nuevo.Tipo.Id); 
+                datos.setearParametro("@idDebilidad", nuevo.Debilidad.Id); 
+                datos.ejecutarAccion(); 
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion(); //5
+            }
+        }
         public void agregar(Pokemon nuevo)
         {
             AccesoDatos datos = new AccesoDatos(); //2
