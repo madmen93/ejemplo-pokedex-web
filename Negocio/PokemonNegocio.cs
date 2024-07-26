@@ -24,7 +24,7 @@ namespace negocio
             {
                 conexion.ConnectionString = "server=DESKTOP-A97N5T7\\SQLEXPRESS; database=POKEDEX_DB; integrated security=true"; // también puede ser ".\\SQLEXPRESS" o "(local)\\SQLEXPRESS"
                 comando.CommandType = System.Data.CommandType.Text;
-                comando.CommandText = "Select Numero, Nombre, P.Descripcion, UrlImagen, E.Descripcion Tipo, D.Descripcion Debilidad, P.IdTipo, P.IdDebilidad, P.Id from POKEMONS P, ELEMENTOS E, ELEMENTOS D where E.Id = P.IdTipo AND D.Id = P.IdDebilidad And P.Activo = 1 "; //al final agregamos un espacion en blanco para el if:
+                comando.CommandText = "Select Numero, Nombre, P.Descripcion, UrlImagen, E.Descripcion Tipo, D.Descripcion Debilidad, P.IdTipo, P.IdDebilidad, P.Id, Activo from POKEMONS P, ELEMENTOS E, ELEMENTOS D where E.Id = P.IdTipo AND D.Id = P.IdDebilidad "; //al final agregamos un espacion en blanco para el if:
                 if (id != "")
                     comando.CommandText += "And P.Id = " + id;
                 comando.Connection = conexion;
@@ -52,6 +52,7 @@ namespace negocio
                     aux.Debilidad = new Elemento(); //8
                     aux.Debilidad.Id = (int)lector["IdDebilidad"]; 
                     aux.Debilidad.Descripcion = (string)lector["Debilidad"]; //9
+                    aux.Activo = bool.Parse(lector["Activo"].ToString());
 
                     lista.Add(aux); //10
                 }
@@ -225,14 +226,15 @@ namespace negocio
             }
         }
 
-        public void eliminarLogico(int id)
+        public void eliminarLogico(int id, bool activo = false) //activo = false hace que este parámetro sea opcional
         {
             AccesoDatos datos = new AccesoDatos();
 
             try
             {
-                datos.setearConsulta("update POKEMONS set Activo = 0 where Id = @id");
+                datos.setearConsulta("update POKEMONS set Activo = @activo where Id = @id");
                 datos.setearParametro("@id", id);
+                datos.setearParametro("@activo", activo);
                 datos.ejecutarAccion();
             }
             catch (Exception ex)
