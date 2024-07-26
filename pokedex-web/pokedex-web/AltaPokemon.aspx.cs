@@ -12,9 +12,11 @@ namespace pokedex_web
 {
     public partial class AltaPokemon : System.Web.UI.Page
     {
+        public bool ConfirmaEliminacion { get; set; }
         protected void Page_Load(object sender, EventArgs e)
         {
             txbId.Enabled = false;
+            ConfirmaEliminacion = false;
             try
             {
                 //Configuración inicial para nuevo pokemon:
@@ -98,6 +100,29 @@ namespace pokedex_web
         {
             string url = txbUrlImagen.Text;
             imgPokemon.ImageUrl = url;
+        }
+
+        protected void btnEliminar_Click(object sender, EventArgs e)
+        {
+            ConfirmaEliminacion = true;
+        }
+
+        protected void btnConfirmaEliminar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (chbEliminar.Checked)
+                {
+                    PokemonNegocio negocio = new PokemonNegocio();
+                    negocio.eliminar(int.Parse(txbId.Text));
+                    Response.Redirect("ListaPokemons.aspx", false);
+                }
+            }
+            catch (Exception ex)
+            {
+                Session.Add("error", ex);
+                throw;
+            }
         }
     }
 }

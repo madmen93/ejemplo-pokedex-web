@@ -7,9 +7,11 @@
     <%if (Request.QueryString["id"] == null)
         {
 
-%>
+    %>
     <asp:Label runat="server" Text="Nuevo Pokemon" ID="lbTitulo" CssClass="fs-2"></asp:Label>
-           <%} else { %>
+    <%}
+        else
+        { %>
     <asp:Label runat="server" Text="Modificar Pokemon" ID="lbTituloMod" CssClass="fs-2"></asp:Label>
     <% } %>
     <div class="row">
@@ -69,4 +71,24 @@
     </div>
     <asp:Button ID="btnAceptar" runat="server" Text="Aceptar" CssClass="btn btn-primary" OnClick="btnAceptar_Click" />
     <a href="ListaPokemons.aspx">Cancelar</a>
+    <%if (Request.QueryString["id"] != null)
+        {%>
+    <asp:UpdatePanel runat="server">
+        <ContentTemplate>
+            <div class="row">
+                <div class="col-6">
+                    <br />
+                    <asp:Button ID="btnEliminar" runat="server" Text="Eliminar" CssClass="btn btn-danger" OnClick="btnEliminar_Click" />
+                    <%if (ConfirmaEliminacion)
+                        {  %>
+                    <div class="mb-3">
+                        <asp:CheckBox ID="chbEliminar" runat="server" Text="¿Confirma eliminación?" />
+                        <asp:Button ID="btnConfirmaEliminar" runat="server" Text="Confirmar" CssClass="btn btn-outline-danger" OnClick="btnConfirmaEliminar_Click" />
+                    </div>
+                    <% } %>
+                </div>
+            </div>
+        </ContentTemplate>
+    </asp:UpdatePanel>
+    <%} %>
 </asp:Content>
