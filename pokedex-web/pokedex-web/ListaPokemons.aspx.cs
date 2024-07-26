@@ -16,5 +16,17 @@ namespace pokedex_web
             gdvPokemon.DataSource = negocio.listarconSP();
             gdvPokemon.DataBind();
         }
+
+        protected void gdvPokemon_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string id = gdvPokemon.SelectedDataKey.Value.ToString();
+            Response.Redirect("AltaPokemon.aspx?id=" + id, false);
+        }
+
+        protected void gdvPokemon_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            gdvPokemon.PageIndex = e.NewPageIndex;
+            gdvPokemon.DataBind();
+        }
     }
 }
