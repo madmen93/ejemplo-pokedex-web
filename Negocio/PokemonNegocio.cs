@@ -97,6 +97,7 @@ namespace negocio
                     aux.Debilidad = new Elemento(); //8
                     aux.Debilidad.Id = (int)datos.Lector["IdDebilidad"];
                     aux.Debilidad.Descripcion = (string)datos.Lector["Debilidad"]; //9
+                    aux.Activo = bool.Parse(datos.Lector["Activo"].ToString());
 
                     lista.Add(aux); //10
                 }

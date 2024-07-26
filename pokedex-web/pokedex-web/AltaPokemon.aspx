@@ -72,7 +72,8 @@
     <asp:Button ID="btnAceptar" runat="server" Text="Aceptar" CssClass="btn btn-primary" OnClick="btnAceptar_Click" />
     <a href="ListaPokemons.aspx">Cancelar</a>
     <%if (Request.QueryString["id"] != null)
-        {%>
+        { %>
+    <asp:Button ID="btnInactivar" CssClass="btn btn-warning" OnClick="btnInactivar_Click" runat="server" Text="Inactivar" />
     <asp:UpdatePanel runat="server">
         <ContentTemplate>
             <div class="row">
