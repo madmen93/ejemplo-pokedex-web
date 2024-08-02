@@ -54,11 +54,13 @@
                     <asp:TextBox ID="txbDescripcion" CssClass="form-control" runat="server" TextMode="MultiLine"></asp:TextBox>
                 </div>
             </div>
+            <%-- Añadimos UpdatePanel para que solo ese segmento de la página se actualice al dar Tab en el TextBox de la UrlImagen --%>
             <asp:UpdatePanel runat="server">
                 <ContentTemplate>
                     <div class="mb-3 row">
                         <label for="txbUrlImagen" class="col-sm-2 col-form-label">Url imagen:</label>
                         <div class="col-sm-10">
+                            <%-- Añadimos la propiedad AutoPostBack en "true" para envíar automáticamente el estado del TextBox. Por defecto es "false": --%>
                             <asp:TextBox ID="txbUrlImagen" CssClass="form-control" runat="server" OnTextChanged="txbUrlImagen_TextChanged" AutoPostBack="true"></asp:TextBox>
                         </div>
                     </div>

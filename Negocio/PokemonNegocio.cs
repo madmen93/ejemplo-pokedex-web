@@ -13,7 +13,7 @@ namespace negocio
     public class PokemonNegocio
     {
         //para leer los datos en la DB en SQL
-        public List<Pokemon> listar(string id = "") //PRIMERO: crear la lista ---OJO: se le agregó el string id para cuando modifiquemos el pokemon 
+        public List<Pokemon> listar(string id = "") //PRIMERO: crear la lista ---OJO: se le agregó el string id para cuando modifiquemos el pokemon, si no le mandas nada queda vacío y trae todos, caso contrario trae el pokemon del id 
         {
             List<Pokemon> lista = new List<Pokemon>();//PRIMERO: crear la lista
             SqlConnection conexion = new SqlConnection(); //CUARTO: Crear los objetos para la lectura de la DB (1)
@@ -117,6 +117,7 @@ namespace negocio
 
             try //1
             {
+                //Con procedimiento almacenado, mandamos los parámetros:
                 datos.setearProcedimiento("storedAltaPokemon");
                 datos.setearParametro("@numero", nuevo.Numero); 
                 datos.setearParametro("@nombre", nuevo.Nombre); 
